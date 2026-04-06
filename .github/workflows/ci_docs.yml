@@ -9,8 +9,6 @@ on:
 jobs:
   build_docs:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -30,9 +28,10 @@ jobs:
         with:
           name: documentation
           path: docs/build
-      - name: Deploy
+      - name: Deploy to Cloudflare Pages
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: peaceiris/actions-gh-pages@v4
+        uses: cloudflare/wrangler-action@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs/build
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy docs/build --project-name=pytest-pep723 --branch=main
