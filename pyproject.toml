@@ -3,24 +3,29 @@ name = "pytest-pep723"
 dynamic = ["version"]
 description = "Pytest plugin to verify PEP 723 inline script metadata covers all imports."
 readme = "README.md"
-authors = [
-    { name = "Rohit Goswami", email = "rgoswami@ieee.org" }
-]
+authors = [{ name = "Rohit Goswami", email = "rgoswami@ieee.org" }]
 requires-python = ">=3.10"
 license = "MIT"
-keywords = ["pytest", "pep723", "uv", "inline-metadata", "script", "dependencies"]
+keywords = [
+  "pytest",
+  "pep723",
+  "uv",
+  "inline-metadata",
+  "script",
+  "dependencies",
+]
 classifiers = [
-    "Development Status :: 4 - Beta",
-    "Framework :: Pytest",
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python :: 3.14",
-    "Topic :: Software Development :: Testing",
+  "Development Status :: 4 - Beta",
+  "Framework :: Pytest",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Software Development :: Testing",
 ]
 dependencies = ["pytest>=7"]
 
@@ -59,4 +64,4 @@ select = ["E", "F", "I", "W"]
 
 [tool.towncrier]
 directory = "docs/newsfragments"
-filename  = "CHANGELOG.rst"
+filename = "CHANGELOG.rst"
