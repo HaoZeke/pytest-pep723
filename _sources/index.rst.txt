@@ -1,0 +1,63 @@
+
+================
+``pytest-pep723``
+================
+
+:Author: `Rohit Goswami <https://rgoswami.me>`_
+
+Overview
+--------
+
+``pytest-pep723`` is a pytest plugin that statically verifies
+`PEP 723 <https://peps.python.org/pep-0723/>`_ inline script metadata
+covers every import in your dispatched scripts.
+
+When you use ``uv run`` to dispatch scripts with inline metadata blocks,
+only the declared dependencies are available at runtime. If you add an
+``import readcon`` but forget to add ``readcon`` to the deps block, the
+script fails at dispatch time. This plugin catches those gaps in CI.
+
+Start with the `quickstart <quickstart.rst>`_ or the
+`validation tutorial <tutorials/validating-a-project.rst>`_.
+
+Tutorials
+---------
+
+  .. toctree::
+     :maxdepth: 1
+     :caption: Tutorials
+
+     quickstart
+     tutorials/validating-a-project
+
+How-to Guides
+-------------
+
+  .. toctree::
+     :maxdepth: 1
+     :caption: How-to Guides
+
+     howto/install
+     howto/faq
+
+Reference
+---------
+
+  .. toctree::
+     :maxdepth: 2
+     :caption: Reference
+
+     reference/configuration
+     reference/import-mappings
+     autoapi/index
+     changelog
+
+Contributing
+------------
+
+  .. toctree::
+     :maxdepth: 1
+     :caption: Contributing
+
+     contributing/index
+     contributing/doc_builds

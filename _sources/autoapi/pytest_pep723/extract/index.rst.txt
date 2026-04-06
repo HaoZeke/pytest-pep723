@@ -1,0 +1,77 @@
+pytest_pep723.extract
+=====================
+
+.. py:module:: pytest_pep723.extract
+
+.. autoapi-nested-parse::
+
+   Parse PEP 723 inline script metadata and extract imports from Python files.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   pytest_pep723.extract.IMPORT_TO_PKG
+   pytest_pep723.extract.STDLIB
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   pytest_pep723.extract.has_pep723_block
+   pytest_pep723.extract.parse_pep723_deps
+   pytest_pep723.extract.extract_imports
+   pytest_pep723.extract.normalize_import_to_pkg
+   pytest_pep723.extract.check_script
+   pytest_pep723.extract.find_pep723_scripts
+
+
+Module Contents
+---------------
+
+.. py:data:: IMPORT_TO_PKG
+   :type:  dict[str, str]
+
+.. py:data:: STDLIB
+   :type:  frozenset[str]
+
+.. py:function:: has_pep723_block(source: str) -> bool
+
+   Check whether source contains a PEP 723 script metadata block.
+
+
+.. py:function:: parse_pep723_deps(source: str) -> set[str]
+
+   Extract normalized package names from a PEP 723 script block.
+
+   Returns the set of lowercased package names (version specs stripped).
+
+
+.. py:function:: extract_imports(source: str) -> set[str]
+
+   Extract all top-level package names from import statements in source.
+
+
+.. py:function:: normalize_import_to_pkg(imp: str) -> str
+
+   Map an import name to the expected PyPI package name.
+
+
+.. py:function:: check_script(source: str, ignore_imports: frozenset[str] = frozenset()) -> list[str]
+
+   Check a PEP 723 script for uncovered imports.
+
+   Returns a list of import names that are not covered by the declared
+   inline dependencies, stdlib, or the ignore set.
+
+
+.. py:function:: find_pep723_scripts(root: pathlib.Path) -> list[pathlib.Path]
+
+   Recursively find .py files under root with PEP 723 script blocks.
+
+

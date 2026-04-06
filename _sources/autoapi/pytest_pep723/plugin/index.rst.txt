@@ -1,0 +1,162 @@
+pytest_pep723.plugin
+====================
+
+.. py:module:: pytest_pep723.plugin
+
+.. autoapi-nested-parse::
+
+   Pytest plugin for PEP 723 inline script dependency validation.
+
+   Automatically discovers Python files containing PEP 723 ``# /// script``
+   metadata blocks and verifies that every import is covered by the declared
+   inline dependencies.
+
+   Configuration (pyproject.toml)::
+
+       [tool.pytest-pep723]
+       paths = ["src/mypkg"]          # directories to scan (required)
+       ignore_imports = ["mypkg"]     # imports to skip (internal packages, conda-only)
+       extra_mappings = {"gi" = "pygobject"}  # additional import->pkg mappings
+
+   Or via CLI::
+
+       pytest --pep723-check --pep723-paths src/mypkg
+
+
+
+Exceptions
+----------
+
+.. autoapisummary::
+
+   pytest_pep723.plugin.PEP723DepError
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   pytest_pep723.plugin.PEP723File
+   pytest_pep723.plugin.PEP723Item
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   pytest_pep723.plugin.pytest_addoption
+   pytest_pep723.plugin._get_config_paths
+   pytest_pep723.plugin._get_ignore_imports
+   pytest_pep723.plugin._apply_extra_mappings
+   pytest_pep723.plugin.pytest_configure
+   pytest_pep723.plugin.pytest_collect_file
+
+
+Module Contents
+---------------
+
+.. py:function:: pytest_addoption(parser: pytest.Parser) -> None
+
+.. py:function:: _get_config_paths(config: pytest.Config) -> list[pathlib.Path]
+
+   Resolve scan paths from CLI options or ini config.
+
+
+.. py:function:: _get_ignore_imports(config: pytest.Config) -> frozenset[str]
+
+   Resolve ignore set from CLI options or ini config.
+
+
+.. py:function:: _apply_extra_mappings(config: pytest.Config) -> None
+
+   Register extra import->package mappings from ini config.
+
+
+.. py:function:: pytest_configure(config: pytest.Config) -> None
+
+.. py:class:: PEP723File(*, ignore_imports: frozenset[str], **kwargs)
+
+   Bases: :py:obj:`pytest.File`
+
+
+   Collector for a single PEP 723 script file.
+
+
+   .. py:attribute:: _ignore_imports
+
+
+   .. py:method:: collect()
+
+      Collect children (items and collectors) for this collector.
+
+
+
+.. py:class:: PEP723Item(*, ignore_imports: frozenset[str], **kwargs)
+
+   Bases: :py:obj:`pytest.Item`
+
+
+   Test item that checks one PEP 723 script for uncovered imports.
+
+
+   .. py:attribute:: _ignore_imports
+
+
+   .. py:method:: runtest() -> None
+
+      Run the test case for this item.
+
+      Must be implemented by subclasses.
+
+      .. seealso:: :ref:`non-python tests`
+
+
+
+   .. py:method:: repr_failure(excinfo, style=None)
+
+      Return a representation of a collection or test failure.
+
+      .. seealso:: :ref:`non-python tests`
+
+      :param excinfo: Exception information for the failure.
+
+
+
+   .. py:method:: reportinfo()
+
+      Get location information for this item for test reports.
+
+      Returns a tuple with three elements:
+
+      - The path of the test (default ``self.path``)
+      - The 0-based line number of the test (default ``None``)
+      - A name of the test to be shown (default ``""``)
+
+      .. seealso:: :ref:`non-python tests`
+
+
+
+.. py:exception:: PEP723DepError(path: pathlib.Path, missing: list[str])
+
+   Bases: :py:obj:`Exception`
+
+
+   Raised when a PEP 723 script has uncovered imports.
+
+
+   .. py:attribute:: path
+
+
+   .. py:attribute:: missing
+
+
+   .. py:method:: __str__() -> str
+
+      Return str(self).
+
+
+
+.. py:function:: pytest_collect_file(file_path: pathlib.Path, parent: pytest.Collector) -> PEP723File | None
+

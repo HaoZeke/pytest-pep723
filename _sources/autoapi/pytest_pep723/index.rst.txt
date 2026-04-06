@@ -1,0 +1,37 @@
+pytest_pep723
+=============
+
+.. py:module:: pytest_pep723
+
+.. autoapi-nested-parse::
+
+   pytest-pep723: verify PEP 723 inline script metadata covers all imports.
+
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/pytest_pep723/_version/index
+   /autoapi/pytest_pep723/extract/index
+   /autoapi/pytest_pep723/plugin/index
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   pytest_pep723.__version__
+
+
+Package Contents
+----------------
+
+.. py:data:: __version__
+   :value: '0.0.0.dev0'
+
+

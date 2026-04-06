@@ -1,0 +1,108 @@
+
+==========
+Quickstart
+==========
+
+This page walks through the main features of ``pytest-pep723`` with
+minimal examples.
+
+Installation
+------------
+
+.. code:: bash
+
+    uv add --group dev pytest-pep723
+
+Or with pip:
+
+.. code:: bash
+
+    pip install pytest-pep723
+
+Basic Usage
+-----------
+
+Run the plugin against your project's PEP 723 scripts:
+
+.. code:: bash
+
+    pytest --pep723-check --pep723-paths src/mypkg
+
+The plugin discovers every ``.py`` file under the given paths that
+contains a ``# /// script`` metadata block, then verifies that every
+``import`` and ``from X import`` statement is covered by the declared
+inline dependencies.
+
+Configuration
+-------------
+
+Configure via ``pyproject.toml`` to avoid repeating CLI flags:
+
+.. code:: toml
+
+    [tool.pytest.ini_options]
+    pep723_paths =
+        src/mypkg
+    pep723_ignore_imports =
+        mypkg
+        internal_helpers
+
+Then simply:
+
+.. code:: bash
+
+    pytest --pep723-check
+
+What Gets Checked
+-----------------
+
+For each PEP 723 script, the plugin:
+
+1. Parses the ``# /// script`` dependencies block
+
+2. Extracts all imports via Python's AST
+
+3. Filters out stdlib and ignored imports
+
+4. Maps import names to PyPI package names (e.g. ``PIL`` -> ``pillow``)
+
+5. Reports any import not covered by the declared deps
+
+Example Output
+--------------
+
+When a script has uncovered imports, the failure looks like:
+
+::
+
+    FAILED myscript.py::pep723_deps
+      PEP 723 script myscript.py has imports not covered by inline dependencies:
+        Missing: numpy, requests
+        File: /path/to/myscript.py
+
+      Fix: add the missing package(s) to the # /// script dependencies block.
+
+Selective Runs
+--------------
+
+All PEP 723 tests are tagged with the ``pep723`` marker:
+
+.. code:: bash
+
+    # Run only PEP 723 checks
+    pytest --pep723-check -m pep723
+
+    # Run everything except PEP 723 checks
+    pytest -m "not pep723"
+
+Next Steps
+----------
+
+- `Tutorial: Validating a real project <tutorials/validating-a-project.rst>`_ -- a
+  complete walkthrough with a dispatcher-based CLI project
+
+- `Configuration reference <reference/configuration.rst>`_ -- all CLI
+  options and ini settings
+
+- `Import mappings <reference/import-mappings.rst>`_ -- the full
+  import-to-package mapping table

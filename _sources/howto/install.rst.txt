@@ -1,0 +1,34 @@
+
+============
+Installation
+============
+
+With uv (recommended)
+---------------------
+
+.. code:: bash
+
+    uv add --group dev pytest-pep723
+
+With pip
+--------
+
+.. code:: bash
+
+    pip install pytest-pep723
+
+Verify
+------
+
+.. code:: bash
+
+    pytest --co -p pep723
+
+The output header should include ``plugins: pep723-X.Y.Z``.
+
+Requirements
+------------
+
+- Python >= 3.10
+
+- pytest >= 7

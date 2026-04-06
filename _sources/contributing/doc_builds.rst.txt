@@ -1,0 +1,87 @@
+
+=======================
+Documentation Standards
+=======================
+
+Authoring with Org-mode
+-----------------------
+
+We use ``orgmode`` as our primary authoring format.
+
+Syntax Reference
+    Consult the `Org Mode Manual <https://orgmode.org/manual/index.html>`_ for basic syntax.
+
+Definition Lists \:\: Use the format: ~- Term
+    Definition~.
+
+Source Blocks
+    Use ``#+BEGIN_SRC`` blocks for code samples.
+
+Documentation Framework
+-----------------------
+
+The `Diataxis framework <https://diataxis.fr/>`_ informs the content categories:
+
+Tutorials
+    Learning-oriented, step-by-step walkthroughs.
+
+How-to Guides
+    Task-oriented, solving specific problems.
+
+Reference
+    Information-oriented, complete specifications.
+
+Explanation
+    Understanding-oriented, background and context.
+
+Writing Style
+-------------
+
+RST Directives
+    Use ``#+BEGIN_EXPORT rst`` blocks for Sphinx-specific
+    directives like ``toctree``.
+
+External References
+    Use ``@@rst::...@@`` for intersphinx links.
+
+Source Code Links
+    Use ``@@rst::mod:`pytest_pep723.extract`@@``.
+
+Using Cog
+---------
+
+The import mappings table in ``reference/import-mappings.org`` uses
+`cog <https://nedbatchelder.com/code/cog/>`_ to auto-generate content from
+the source code. To regenerate:
+
+.. code:: bash
+
+    uvx cogapp -r docs/orgmode/reference/import-mappings.org
+
+Cog blocks are delimited by ``[[[cog ... ]]]`` and ``[[[end]]]`` markers
+inside RST export blocks.
+
+Local Build
+-----------
+
+.. code:: bash
+
+    # Full pipeline: org -> rst -> sphinx
+    cd docs && emacs --batch --load export.el
+    sphinx-build docs/source/ docs/build
+
+Serve locally:
+
+.. code:: bash
+
+    python -m http.server -d docs/build
+
+Release Notes
+-------------
+
+The changelog is managed by `towncrier <https://towncrier.readthedocs.io/>`_.
+Every PR should include a news fragment in ``docs/newsfragments/``.
+
+.. code:: bash
+
+    uvx towncrier create -c "Added PEP 723 dep validation." +added
