@@ -108,7 +108,13 @@ data-aria-dark="Switch to auto color mode">
     </button>
     <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
 <li><a class="reference internal" href="#">Changelog</a></li>
-<li><a class="reference internal" href="#id1">Changelog</a></li>
+<li><a class="reference internal" href="#id1">Changelog</a><ul>
+<li><a class="reference internal" href="#pytest-pep723-0-1-0-2026-04-06">pytest-pep723 0.1.0 (2026-04-06)</a><ul>
+<li><a class="reference internal" href="#added">Added</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div><a class="js-repo-stats repo-stats flex items-center" href="https://github.com/HaoZeke/pytest-pep723"
   data-type="github" data-user="HaoZeke" data-repo="pytest-pep723">
@@ -202,6 +208,19 @@ data-aria-dark="Switch to auto color mode">
 </section>
 <section id="id1">
 <h1>Changelog<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<section id="pytest-pep723-0-1-0-2026-04-06">
+<h2>pytest-pep723 0.1.0 (2026-04-06)<a class="headerlink" href="#pytest-pep723-0-1-0-2026-04-06" title="Link to this heading">¶</a></h2>
+<section id="added">
+<h3>Added<a class="headerlink" href="#added" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Built-in import-to-package mappings for 20+ packages where import name differs from PyPI name (PIL/pillow, sklearn/scikit-learn, etc.).</p></li>
+<li><p>CLI options: <code class="docutils literal notranslate"><span class="pre">--pep723-check</span></code>, <code class="docutils literal notranslate"><span class="pre">--pep723-paths</span></code>, <code class="docutils literal notranslate"><span class="pre">--pep723-ignore</span></code> for controlling scan scope.</p></li>
+<li><p>INI configuration: <code class="docutils literal notranslate"><span class="pre">pep723_paths</span></code>, <code class="docutils literal notranslate"><span class="pre">pep723_ignore_imports</span></code>, <code class="docutils literal notranslate"><span class="pre">pep723_extra_mappings</span></code> in pyproject.toml.</p></li>
+<li><p>Initial release of pytest-pep723. Statically verifies PEP 723 inline script metadata covers all imports.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pep723</span></code> pytest marker for selective test runs (<code class="docutils literal notranslate"><span class="pre">-m</span> <span class="pre">pep723</span></code> or <code class="docutils literal notranslate"><span class="pre">-m</span> <span class="pre">&quot;not</span> <span class="pre">pep723&quot;</span></code>).</p></li>
+</ul>
+</section>
+</section>
 </section>
 
         </article><button class="back-to-top" type="button">
