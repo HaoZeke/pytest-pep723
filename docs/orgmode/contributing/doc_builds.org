@@ -1,0 +1,68 @@
+#+TITLE: Documentation Standards
+#+OPTIONS: toc:nil todo:nil num:nil author:nil title:nil ^:nil
+
+#+begin_export rst
+=======================
+Documentation Standards
+=======================
+#+end_export
+
+* Authoring with Org-mode
+
+We use ~orgmode~ as our primary authoring format.
+
+- Syntax Reference :: Consult the [[https://orgmode.org/manual/index.html][Org Mode Manual]] for basic syntax.
+- Definition Lists :: Use the format: ~- Term :: Definition~.
+- Source Blocks :: Use ~#+BEGIN_SRC~ blocks for code samples.
+
+* Documentation Framework
+
+The [[https://diataxis.fr/][Diataxis framework]] informs the content categories:
+
+- Tutorials :: Learning-oriented, step-by-step walkthroughs.
+- How-to Guides :: Task-oriented, solving specific problems.
+- Reference :: Information-oriented, complete specifications.
+- Explanation :: Understanding-oriented, background and context.
+
+* Writing Style
+
+- RST Directives :: Use ~#+BEGIN_EXPORT rst~ blocks for Sphinx-specific
+  directives like ~toctree~.
+- External References :: Use ~@@rst::...@@~ for intersphinx links.
+- Source Code Links :: Use ~@@rst::mod:`pytest_pep723.extract`@@~.
+
+* Using Cog
+
+The import mappings table in ~reference/import-mappings.org~ uses
+[[https://nedbatchelder.com/code/cog/][cog]] to auto-generate content from
+the source code. To regenerate:
+
+#+begin_src bash
+uvx cogapp -r docs/orgmode/reference/import-mappings.org
+#+end_src
+
+Cog blocks are delimited by ~[[[cog ... ]]]~ and ~[[[end]]]~ markers
+inside RST export blocks.
+
+* Local Build
+
+#+begin_src bash
+# Full pipeline: org -> rst -> sphinx
+cd docs && emacs --batch --load export.el
+sphinx-build docs/source/ docs/build
+#+end_src
+
+Serve locally:
+
+#+begin_src bash
+python -m http.server -d docs/build
+#+end_src
+
+* Release Notes
+
+The changelog is managed by [[https://towncrier.readthedocs.io/][towncrier]].
+Every PR should include a news fragment in ~docs/newsfragments/~.
+
+#+begin_src bash
+uvx towncrier create -c "Added PEP 723 dep validation." +added
+#+end_src

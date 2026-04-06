@@ -1,0 +1,72 @@
+#+TITLE: Configuration Reference
+#+OPTIONS: toc:nil todo:nil num:nil author:nil title:nil ^:nil
+
+#+begin_export rst
+=======================
+Configuration Reference
+=======================
+#+end_export
+
+* CLI Options
+
+| Option | Description |
+|------------------------------------+---------------------------------------------------|
+| ~--pep723-check~ | Enable PEP 723 inline script dependency checks |
+| ~--pep723-paths PATH~ | Directory to scan (repeatable) |
+| ~--pep723-ignore NAME~ | Import name to ignore (repeatable) |
+
+* INI Options (~pyproject.toml~)
+
+All options go under ~[tool.pytest.ini_options]~:
+
+** ~pep723_paths~
+
+Directories to scan for PEP 723 scripts, relative to the project root.
+One path per line.
+
+#+begin_src toml
+[tool.pytest.ini_options]
+pep723_paths =
+    src/mypkg
+    scripts
+#+end_src
+
+When no paths are configured and ~--pep723-paths~ is not given, the
+plugin scans all ~.py~ files collected by pytest.
+
+** ~pep723_ignore_imports~
+
+Import names to skip during validation. Use for internal packages,
+conda-only deps, or intentionally optional imports. One name per line.
+
+#+begin_src toml
+[tool.pytest.ini_options]
+pep723_ignore_imports =
+    mypkg
+    ira_mod
+    tblite
+#+end_src
+
+** ~pep723_extra_mappings~
+
+Additional import-to-package mappings. One ~import=package~ pair per
+line. These extend the built-in mapping table.
+
+#+begin_src toml
+[tool.pytest.ini_options]
+pep723_extra_mappings =
+    myspecial=my-special-pkg
+    gi=pygobject
+#+end_src
+
+* Marker
+
+The plugin registers a ~pep723~ marker. Use it for selective runs:
+
+#+begin_src bash
+# Run only PEP 723 checks
+pytest --pep723-check -m pep723
+
+# Exclude PEP 723 checks
+pytest -m "not pep723"
+#+end_src

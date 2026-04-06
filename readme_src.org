@@ -1,0 +1,137 @@
+#+OPTIONS: num:nil
+
+* About
+:PROPERTIES:
+:CUSTOM_ID: about
+:END:
+#+begin_export markdown
+[![Tests](https://github.com/HaoZeke/pytest-pep723/actions/workflows/ci.yml/badge.svg)](https://github.com/HaoZeke/pytest-pep723/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/pytest-pep723)](https://pypi.org/project/pytest-pep723/)
+[![Python](https://img.shields.io/pypi/pyversions/pytest-pep723)](https://pypi.org/project/pytest-pep723/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Hatch project](https://img.shields.io/badge/%F0%9F%A5%9A-Hatch-4051b5.svg)](https://github.com/pypa/hatch)
+#+end_export
+A pytest plugin that verifies [[https://peps.python.org/pep-0723/][PEP 723]] inline
+script metadata covers every import in your dispatched scripts.
+
+When you use ~uv run~ to dispatch scripts with inline metadata blocks,
+only the declared dependencies are available at runtime. If you add an
+~import readcon~ but forget to add ~readcon~ to the deps block, the
+script fails at dispatch time. This plugin catches those gaps
+statically in CI.
+
+** Installation
+:PROPERTIES:
+:CUSTOM_ID: install
+:END:
+
+#+begin_src bash
+uv add --group dev pytest-pep723
+#+end_src
+
+** Usage
+:PROPERTIES:
+:CUSTOM_ID: usage
+:END:
+
+#+begin_src bash
+# Scan all .py files under src/ for PEP 723 scripts
+pytest --pep723-check --pep723-paths src/
+
+# Ignore internal/conda-only packages
+pytest --pep723-check --pep723-paths src/ --pep723-ignore mypkg
+#+end_src
+
+Or configure in ~pyproject.toml~:
+
+#+begin_src toml
+[tool.pytest.ini_options]
+pep723_paths =
+    src/mypkg
+pep723_ignore_imports =
+    mypkg
+    ira_mod
+pep723_extra_mappings =
+    gi=pygobject
+#+end_src
+
+Then:
+
+#+begin_src bash
+pytest --pep723-check
+#+end_src
+
+** Built-in Import Mappings
+:PROPERTIES:
+:CUSTOM_ID: mappings
+:END:
+
+The plugin handles packages where the import name differs from the PyPI
+name. Built-in mappings:
+
+#+begin_export markdown
+<!--[[[cog
+import cog
+from pytest_pep723.extract import IMPORT_TO_PKG
+cog.outl("| Import | PyPI Package |")
+cog.outl("|--------|-------------|")
+for imp, pkg in sorted(IMPORT_TO_PKG.items()):
+    cog.outl(f"| `{imp}` | `{pkg}` |")
+]]]-->
+| Import | PyPI Package |
+|--------|-------------|
+| `Bio` | `biopython` |
+| `Crypto` | `pycryptodome` |
+| `IPython` | `ipython` |
+| `PIL` | `pillow` |
+| `adjustText` | `adjusttext` |
+| `attr` | `attrs` |
+| `bs4` | `beautifulsoup4` |
+| `cv2` | `opencv-python` |
+| `dateutil` | `python-dateutil` |
+| `gi` | `pygobject` |
+| `google` | `google-api-python-client` |
+| `mpl_toolkits` | `matplotlib` |
+| `pkg_resources` | `setuptools` |
+| `resvg` | `resvg-py` |
+| `serial` | `pyserial` |
+| `skimage` | `scikit-image` |
+| `sklearn` | `scikit-learn` |
+| `usb` | `pyusb` |
+| `wx` | `wxpython` |
+| `yaml` | `pyyaml` |
+<!--[[[end]]]-->
+#+end_export
+
+Custom mappings can be added via ~pep723_extra_mappings~ in
+~pyproject.toml~.
+
+** Features
+:PROPERTIES:
+:CUSTOM_ID: features
+:END:
+
+- Handles multi-line and single-line dependency formats
+- Supports all version operators (~>=~, ~~=~, ~[extras]~, etc.)
+- Built-in mapping for 20+ packages where import name differs from pip name
+- Configurable ignore list for internal packages and conda-only deps
+- Custom import-to-package mappings via ~pep723_extra_mappings~
+- Registers a ~pep723~ marker for selective test runs
+
+* Contributing
+:PROPERTIES:
+:CUSTOM_ID: contributing
+:END:
+
+#+begin_src bash
+git clone https://github.com/HaoZeke/pytest-pep723
+cd pytest-pep723
+uv sync
+uv run pytest -v
+#+end_src
+
+* License
+:PROPERTIES:
+:CUSTOM_ID: license
+:END:
+MIT

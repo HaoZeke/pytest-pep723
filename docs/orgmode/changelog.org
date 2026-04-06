@@ -1,0 +1,10 @@
+#+TITLE: Changelog
+#+OPTIONS: toc:nil todo:nil num:nil author:nil title:nil ^:nil
+
+#+begin_export rst
+=========
+Changelog
+=========
+
+.. include:: ../../CHANGELOG.rst
+#+end_export

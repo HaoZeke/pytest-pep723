@@ -31,6 +31,8 @@ pep723 = "pytest_pep723.plugin"
 Homepage = "https://github.com/HaoZeke/pytest-pep723"
 Repository = "https://github.com/HaoZeke/pytest-pep723"
 Issues = "https://github.com/HaoZeke/pytest-pep723/issues"
+Documentation = "https://pytest-pep723.rgoswami.me"
+Changelog = "https://github.com/HaoZeke/pytest-pep723/blob/main/CHANGELOG.rst"
 
 [build-system]
 requires = ["hatchling", "hatch-vcs"]
@@ -44,6 +46,7 @@ version-file = "src/pytest_pep723/_version.py"
 
 [dependency-groups]
 dev = ["pytest>=8", "pytest-cov", "ruff>=0.9"]
+docs = ["sphinx>=8", "sphinx-autoapi>=3", "shibuya", "sphinx-sitemap"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -53,3 +56,7 @@ exclude = ["src/pytest_pep723/_version.py", "tests/fixtures/"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "W"]
+
+[tool.towncrier]
+directory = "docs/newsfragments"
+filename  = "CHANGELOG.rst"

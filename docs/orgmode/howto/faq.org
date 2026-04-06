@@ -1,0 +1,69 @@
+#+TITLE: FAQ
+#+OPTIONS: toc:nil todo:nil num:nil author:nil title:nil ^:nil
+
+#+begin_export rst
+===
+FAQ
+===
+#+end_export
+
+* Why does the plugin not run without ~--pep723-check~?
+
+The plugin is opt-in to avoid interfering with normal test runs.
+PEP 723 validation is a static check that should run alongside your
+test suite, not replace it.
+
+* How do I handle conda-only packages?
+
+Conda-only packages (e.g. ~tblite~, ~ira_mod~, ~ovito~) cannot appear
+in PEP 723 inline metadata because ~uv~ can only install from PyPI.
+These packages are typically imported conditionally at runtime.
+
+Add them to the ignore list:
+
+#+begin_src toml
+[tool.pytest.ini_options]
+pep723_ignore_imports =
+    tblite
+    ira_mod
+    ovito
+#+end_src
+
+* My package's import name differs from its PyPI name
+
+Use ~pep723_extra_mappings~:
+
+#+begin_src toml
+[tool.pytest.ini_options]
+pep723_extra_mappings =
+    myspecial=my-special-pkg
+#+end_src
+
+The plugin already handles common cases like ~PIL~ -> ~pillow~ and
+~sklearn~ -> ~scikit-learn~. See [[file:../reference/import-mappings.org][import mappings]]
+for the full list.
+
+* Can I run only PEP 723 checks in CI?
+
+Yes, use the ~pep723~ marker:
+
+#+begin_src bash
+pytest --pep723-check -m pep723
+#+end_src
+
+This skips all other tests and runs only the PEP 723 validation.
+
+* What about lazy/conditional imports?
+
+The plugin uses Python's AST to extract *all* import statements in the
+file, including those inside ~if~ blocks, ~try/except~, or function
+bodies. This is intentional: if a code path can be reached, the
+dependency must be available.
+
+If you have imports that are truly optional (e.g. behind a
+~try/except ImportError~), add them to ~pep723_ignore_imports~.
+
+* Does it check ~requires-python~?
+
+No. The plugin only validates the ~dependencies~ list against the
+file's imports. Python version constraints are not checked.

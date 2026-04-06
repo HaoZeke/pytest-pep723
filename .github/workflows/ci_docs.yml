@@ -1,0 +1,36 @@
+name: Build and Deploy Documentation
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  build_docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@v6
+      - uses: purcell/setup-emacs@master
+        with:
+          version: 29.4
+      - name: Install dependencies
+        run: uv sync --group docs
+      - name: Convert org to rst
+        run: cd docs && emacs --batch --load export.el
+      - name: Build docs
+        run: uv run sphinx-build docs/source/ docs/build
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: documentation
+          path: docs/build
+      - name: Deploy
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/build

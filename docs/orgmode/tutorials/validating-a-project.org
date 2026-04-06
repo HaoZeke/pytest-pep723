@@ -1,0 +1,155 @@
+#+TITLE: Tutorial: Validating a Real Project
+#+OPTIONS: toc:nil todo:nil num:nil author:nil title:nil ^:nil
+
+#+begin_export rst
+====================================
+Tutorial: Validating a Real Project
+====================================
+#+end_export
+
+This tutorial walks through adding ~pytest-pep723~ to a project that
+uses PEP 723 inline script metadata with a ~uv~-based dispatcher.
+You will set up the plugin, configure it for your project, run it to
+find a real bug, and fix it.
+
+* Prerequisites
+
+- A Python project with PEP 723 scripts (files containing ~# /// script~ blocks)
+- ~uv~ and ~pytest~ installed
+- Basic familiarity with ~pyproject.toml~
+
+* Step 1: Install the plugin
+
+#+begin_src bash
+uv add --group dev pytest-pep723
+#+end_src
+
+Verify it loaded:
+
+#+begin_src bash
+pytest --co -p pep723
+#+end_src
+
+You should see ~plugins: pep723-...~ in the output header.
+
+* Step 2: Identify your PEP 723 scripts
+
+PEP 723 scripts contain an inline metadata block like:
+
+#+begin_src python
+# /// script
+# requires-python = ">=3.11"
+# dependencies = [
+#   "click",
+#   "numpy",
+#   "matplotlib",
+# ]
+# ///
+#+end_src
+
+Find them in your project:
+
+#+begin_src bash
+grep -rl "# /// script" src/
+#+end_src
+
+* Step 3: Configure the plugin
+
+Add configuration to your ~pyproject.toml~:
+
+#+begin_src toml
+[tool.pytest.ini_options]
+pep723_paths =
+    src/mypkg
+
+# Your own package -- it is importable but not a PyPI dep
+pep723_ignore_imports =
+    mypkg
+
+# Conda-only deps that cannot be in PEP 723 blocks
+#   (they are imported conditionally at runtime)
+# pep723_ignore_imports =
+#     ira_mod
+#     tblite
+
+# If your project uses packages where import != pip name
+# pep723_extra_mappings =
+#     gi=pygobject
+#+end_src
+
+* Step 4: Run the check
+
+#+begin_src bash
+pytest --pep723-check -v
+#+end_src
+
+Example output when everything passes:
+
+#+begin_example
+tests/... PASSED
+src/mypkg/tools/plot_data.py::pep723_deps PASSED
+src/mypkg/tools/analyze.py::pep723_deps PASSED
+
+3 passed in 0.05s
+#+end_example
+
+* Step 5: Finding a real gap
+
+Suppose you recently added ~import readcon~ to a script but forgot to
+update the inline deps. The plugin catches this:
+
+#+begin_example
+FAILED src/mypkg/tools/plot_neb.py::pep723_deps
+  PEP 723 script plot_neb.py has imports not covered by inline dependencies:
+    Missing: readcon
+    File: src/mypkg/tools/plot_neb.py
+
+  Fix: add the missing package(s) to the # /// script dependencies block.
+#+end_example
+
+* Step 6: Fix and verify
+
+Edit the script's inline metadata:
+
+#+begin_src python
+# /// script
+# dependencies = [
+#   "click",
+#   "numpy",
+#   "readcon>=0.7.0",  # <-- added
+# ]
+# ///
+#+end_src
+
+Re-run:
+
+#+begin_src bash
+pytest --pep723-check -v
+#+end_src
+
+All green.
+
+* Step 7: Add to CI
+
+Add ~--pep723-check~ to your CI test command. Example GitHub Actions:
+
+#+begin_src yaml
+- name: Check PEP 723 deps
+  run: uv run pytest --pep723-check -m pep723
+#+end_src
+
+This runs only the PEP 723 checks (fast, no heavy deps needed).
+
+* Summary
+
+You have:
+
+1. Installed ~pytest-pep723~
+2. Configured scan paths and ignore lists
+3. Run it to find a missing dependency
+4. Fixed the gap
+5. Added it to CI
+
+The plugin now guards against the class of bugs where a developer adds
+an import to a PEP 723 script but forgets to declare it in the inline
+metadata block.

@@ -1,0 +1,80 @@
+#+TITLE: Contributing
+#+OPTIONS: toc:nil todo:nil num:nil author:nil title:nil ^:nil
+
+#+begin_export rst
+============
+Contributing
+============
+#+end_export
+
+All contributions are welcome.
+
+* Development Setup
+
+This project uses [[https://docs.astral.sh/uv/][~uv~]] as the primary
+development tool with [[https://hatch.pypa.io/][~hatchling~]] +
+[[https://github.com/ofek/hatch-vcs][~hatch-vcs~]] for building and
+versioning.
+
+#+begin_src bash
+# Clone and install in development mode
+git clone https://github.com/HaoZeke/pytest-pep723
+cd pytest-pep723
+uv sync
+#+end_src
+
+* Running Tests
+
+#+begin_src bash
+uv run pytest -v
+#+end_src
+
+* Linting
+
+#+begin_src bash
+uv run ruff check .
+uv run ruff format --check .
+#+end_src
+
+Or with prek (pre-commit alternative):
+
+#+begin_src bash
+uvx prek run -a
+#+end_src
+
+* Versioning
+
+Versions are derived automatically from *git tags* via ~hatch-vcs~.
+There is no manual version field. Between tags, dev versions are
+generated automatically (e.g. ~0.1.1.dev3+gabcdef~).
+
+* Release Process
+
+#+begin_src bash
+# 1. Ensure tests pass
+uv run pytest -v
+
+# 2. Build changelog (uses towncrier fragments in docs/newsfragments/)
+uvx towncrier build --version "v0.1.0"
+
+# 3. Commit the changelog
+git add CHANGELOG.rst && git commit -m "doc: release notes for v0.1.0"
+
+# 4. Tag the release
+git tag -a v0.1.0 -m "Version 0.1.0"
+
+# 5. Build and publish
+uv build
+uvx twine upload dist/*
+#+end_src
+
+* News Fragments
+
+Every Pull Request should include a news fragment. Create one with:
+
+#+begin_src bash
+uvx towncrier create -c "Description of change." +category.type
+#+end_src
+
+Categories: ~+added~, ~+fixed~, ~+changed~, ~+dev~, ~+security~,
+~+removed~, ~+deprecated~, ~+misc~.

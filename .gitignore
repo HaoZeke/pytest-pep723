@@ -13,6 +13,9 @@ build/
 .coverage
 htmlcov/
 src/pytest_pep723/_version.py
+docs/build/
+docs/source/*.rst
+docs/source/autoapi/
 .claude/
 CLAUDE.md
 .project-ctx.toml

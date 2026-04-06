@@ -1,0 +1,33 @@
+#+TITLE: Installation
+#+OPTIONS: toc:nil todo:nil num:nil author:nil title:nil ^:nil
+
+#+begin_export rst
+============
+Installation
+============
+#+end_export
+
+* With uv (recommended)
+
+#+begin_src bash
+uv add --group dev pytest-pep723
+#+end_src
+
+* With pip
+
+#+begin_src bash
+pip install pytest-pep723
+#+end_src
+
+* Verify
+
+#+begin_src bash
+pytest --co -p pep723
+#+end_src
+
+The output header should include ~plugins: pep723-X.Y.Z~.
+
+* Requirements
+
+- Python >= 3.10
+- pytest >= 7
