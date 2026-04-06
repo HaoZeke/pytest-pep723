@@ -26,7 +26,6 @@ import pytest
 from pytest_pep723.extract import (
     IMPORT_TO_PKG,
     check_script,
-    find_pep723_scripts,
     has_pep723_block,
 )
 
@@ -188,9 +187,7 @@ def pytest_collect_file(
     scan_paths = _get_config_paths(config)
     if scan_paths:
         resolved = file_path.resolve()
-        if not any(
-            resolved == sp or sp in resolved.parents for sp in scan_paths
-        ):
+        if not any(resolved == sp or sp in resolved.parents for sp in scan_paths):
             return None
 
     try:

@@ -49,7 +49,7 @@ dev = ["pytest>=8", "pytest-cov", "ruff>=0.9"]
 testpaths = ["tests"]
 
 [tool.ruff]
-exclude = ["src/pytest_pep723/_version.py"]
+exclude = ["src/pytest_pep723/_version.py", "tests/fixtures/"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "W"]

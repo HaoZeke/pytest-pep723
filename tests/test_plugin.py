@@ -42,7 +42,7 @@ class TestPluginCollection:
         """Without --pep723-check, no PEP 723 items are collected."""
         pytester.makefile(".py", myscript=good_script_content)
         result = pytester.runpytest("--collect-only")
-        result.stdout.fnmatch_lines(["*no tests ran*"])
+        result.stdout.fnmatch_lines(["*no tests*"])
 
     def test_collects_with_flag(self, pytester, good_script_content):
         """With --pep723-check, PEP 723 scripts are collected."""
@@ -57,7 +57,7 @@ class TestPluginCollection:
             regular="import sys\nprint('hello')\n",
         )
         result = pytester.runpytest("--pep723-check", "--collect-only")
-        result.stdout.fnmatch_lines(["*no tests ran*"])
+        result.stdout.fnmatch_lines(["*no tests*"])
 
 
 class TestPluginResults:

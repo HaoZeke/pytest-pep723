@@ -44,7 +44,10 @@ class TestParseDeps:
         assert parse_pep723_deps(source) == set()
 
     def test_version_specs_stripped(self):
-        source = '# /// script\n# dependencies = [\n#   "foo>=1.2",\n#   "bar[extra]~=3.0",\n# ]\n# ///'
+        source = (
+            "# /// script\n# dependencies = [\n"
+            '#   "foo>=1.2",\n#   "bar[extra]~=3.0",\n# ]\n# ///'
+        )
         deps = parse_pep723_deps(source)
         assert deps == {"foo", "bar"}
 
@@ -101,9 +104,7 @@ class TestCheckScript:
 
     def test_ignore_imports(self):
         source = (FIXTURES / "bad_script.py").read_text()
-        missing = check_script(
-            source, ignore_imports=frozenset(["numpy", "requests"])
-        )
+        missing = check_script(source, ignore_imports=frozenset(["numpy", "requests"]))
         assert missing == []
 
     def test_compat_release(self):

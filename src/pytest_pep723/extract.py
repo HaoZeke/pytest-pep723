@@ -169,7 +169,7 @@ def parse_pep723_deps(source: str) -> set[str]:
     block = match.group(1)
     # Strip comment prefixes and join
     stripped = "\n".join(line.lstrip("#").strip() for line in block.splitlines())
-    dep_match = re.search(r"dependencies\s*=\s*\[(.*?)\]", stripped, re.DOTALL)
+    dep_match = re.search(r"dependencies\s*=\s*\[(.*)\]", stripped, re.DOTALL)
     if not dep_match:
         return set()
     deps_block = dep_match.group(1)
