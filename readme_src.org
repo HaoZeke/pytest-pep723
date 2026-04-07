@@ -10,6 +10,7 @@
 [![Python](https://img.shields.io/pypi/pyversions/pytest-pep723)](https://pypi.org/project/pytest-pep723/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Hatch project](https://img.shields.io/badge/%F0%9F%A5%9A-Hatch-4051b5.svg)](https://github.com/pypa/hatch)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19446512.svg)](https://doi.org/10.5281/zenodo.19446512)
 #+end_export
 A pytest plugin that verifies [[https://peps.python.org/pep-0723/][PEP 723]] inline
 script metadata covers every import in your dispatched scripts.
